@@ -9,13 +9,12 @@ import MapGL, {
   GeolocateControl,
 } from "@goongmaps/goong-map-react";
 
-import ControlPanel from "./pages/control-panel";
-import Pins from "./pages/pins";
-import CityInfo from "./pages/city-info";
+import ControlPanel from "./control-panel";
+import Pins from "./pins";
+import CityInfo from "./city-info";
 
-import CITIES from "./helpers/fake_data/cities.json";
-import CinemaForm from "./pages/cinemaForm";
-import { getListCinema } from "./helpers/app_backend/cinema-backend-helper";
+import CinemaForm from "./cinemaForm";
+import { getListCinema } from "../helpers/app_backend/cinema-backend-helper";
 const TOKEN = ""; // Set your goong maptiles key here
 
 const geolocateStyle = {
@@ -42,57 +41,39 @@ const scaleControlStyle = {
   padding: "10px",
 };
 
-export default function App() {
-  // navigator.geolocation.getCurrentPosition(function (position) {
-  //   console.log("Latitude is :", position.coords.latitude);
-  //   console.log("Longitude is :", position.coords.longitude);
-  // });
-
-  const [viewport, setViewport] = useState({});
+export default function Map() {
+  const [viewport, setViewport] = useState({
+    latitude: 21.046459624337025,
+    longitude: 105.78512234850211,
+    zoom: 14,
+    bearing: 0,
+    pitch: 0,
+  });
   const [popupInfo, setPopupInfo] = useState(null);
   const [popupForm, setPopupForm] = useState(null);
   const [latitude, setLatitude] = useState(null);
   const [longitude, setLongtitude] = useState(null);
   const [dataCinema, setDataCinema] = useState(null);
   const [dataListCinema, setDataListCinema] = useState([]);
-  const [itemSearch, setItemSearch] = useState(null);
-  const [userLocation, setUserLocation] = useState({
-    latitude: 0,
-    longitude: 0,
-  });
+  const [dataSearchChoose, setDataSearchChoose] = useState({});
   const fetchCinemas = async () => {
     await getListCinema().then((res) => {
       setDataListCinema(res.body);
     });
   };
+
   const onClickItemSearchHandler = (item) => {
     setViewport({
       latitude: item.latitude,
       longitude: item.longitude,
-      zoom: 17,
+      zoom: 14,
       bearing: 0,
       pitch: 0,
     });
-    setItemSearch(item);
-    setPopupInfo(item);
-    setPopupForm(false);
   };
 
   useEffect(() => {
-    navigator.geolocation.getCurrentPosition(function (position) {
-      setUserLocation({
-        latitude: position.coords.latitude,
-        longitude: position.coords.longitude,
-      });
-      setViewport({
-        latitude: position.coords.latitude,
-        longitude: position.coords.longitude,
-        zoom: 15,
-        bearing: 0,
-        pitch: 1,
-      });
-    }),
-      fetchCinemas();
+    fetchCinemas();
   }, []);
   return (
     <>
@@ -108,7 +89,7 @@ export default function App() {
           setLongtitude(e.lngLat[0]);
           setLatitude(e.lngLat[1]);
           setPopupForm(true);
-          setPopupInfo(null);
+          setPopupInfo(false);
         }}
       >
         {dataListCinema.length > 0 ? (
@@ -116,7 +97,6 @@ export default function App() {
             data={dataListCinema}
             onClick={setPopupInfo}
             setPopupForm={setPopupForm}
-            setItemSearch={setItemSearch}
           />
         ) : (
           <></>
@@ -154,39 +134,13 @@ export default function App() {
           </Popup>
         )}
 
-        {/* {popupForm && latitude && longitude && (
-          <Popup
-            tipSize={5}
-            anchor="top"
-            closeOnClick={false}
-            onClose={setPopupForm}
-            longitude={longitude}
-            latitude={latitude}
-            style={{ background: "#ccc" }}
-          >
-            <CinemaForm
-              latitude={latitude}
-              longitude={longitude}
-              fetchCinemas={fetchCinemas}
-              setPopupForm={setPopupForm}
-            />
-          </Popup>
-        )} */}
-
         <GeolocateControl style={geolocateStyle} />
         <FullscreenControl style={fullscreenControlStyle} />
         <NavigationControl style={navStyle} />
         <ScaleControl style={scaleControlStyle} />
       </MapGL>
 
-      <ControlPanel
-        onClickItemSearchHandler={onClickItemSearchHandler}
-        userLocation={userLocation}
-      />
+      <ControlPanel onClickItemSearchHandler={onClickItemSearchHandler} />
     </>
   );
-}
-
-export function renderToDom(container) {
-  render(<App />, container);
 }

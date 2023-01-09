@@ -1,5 +1,5 @@
 import axios from "axios";
-import accessToken from "./jwt-token-access/accessToken";
+import accessToken from "./jwt_token_access/accessToken";
 
 //pass new generated access token here
 const token = accessToken;
@@ -11,7 +11,7 @@ const axiosApi = axios.create({
   baseURL: API_URL,
 });
 
-axiosApi.defaults.headers.common["Authorization"] = token;
+axiosApi.defaults.headers.common["Authorization"] = "Bearer eyJhbGciOiJIUzI1NiIsInR5cCI6IkpXVCJ9.eyJlbWFpbCI6Im5kdXlsb25nOTUwMUBnbWFpbC5jb20iLCJpZCI6MSwiaWF0IjoxNjcyNTg4Njk0LCJleHAiOjE2NzI2MjQ2OTR9.HuIJG6CnSwUS1kiRMJpljwY0gbl-1tHfqOvRI06Ejow";
 
 axiosApi.interceptors.response.use(
   response => response,

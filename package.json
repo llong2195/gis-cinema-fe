@@ -1,12 +1,15 @@
 {
   "scripts": {
-    "start": "webpack-dev-server --progress --hot --open",
-    "start-local": "webpack-dev-server --env.local --progress --hot --open"
+    "start": "env-cmd -f .env webpack-dev-server --progress --hot --open",
+    "start-local": "env-cmd -f .env webpack-dev-server --env.local --progress --hot --open"
   },
   "dependencies": {
     "@goongmaps/goong-map-react": "^1.0.9",
+    "axios": "^1.2.2",
+    "dotenv": "^16.0.3",
     "react": "^16.3.0",
     "react-dom": "^16.3.0",
+    "react-router-dom": "^5.2.0",
     "reactstrap": "^9.1.5"
   },
   "devDependencies": {
