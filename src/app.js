@@ -16,6 +16,10 @@ import CityInfo from "./pages/city-info";
 import CITIES from "./helpers/fake_data/cities.json";
 import CinemaForm from "./pages/cinemaForm";
 import { getListCinema } from "./helpers/app_backend/cinema-backend-helper";
+import CinemaFormEdit from "./pages/cinemaFormEdit";
+import SlidingPanel from "react-sliding-side-panel";
+import { withRouter, useHistory } from "react-router-dom";
+
 const TOKEN = ""; // Set your goong maptiles key here
 
 const geolocateStyle = {
@@ -41,13 +45,9 @@ const scaleControlStyle = {
   left: 0,
   padding: "10px",
 };
-
-export default function App() {
-  // navigator.geolocation.getCurrentPosition(function (position) {
-  //   console.log("Latitude is :", position.coords.latitude);
-  //   console.log("Longitude is :", position.coords.longitude);
-  // });
-
+function App() {
+  const history = useHistory();
+  const [dataEdit, setDataEdit] = useState(null);
   const [viewport, setViewport] = useState({});
   const [popupInfo, setPopupInfo] = useState(null);
   const [popupForm, setPopupForm] = useState(null);
@@ -56,6 +56,8 @@ export default function App() {
   const [dataCinema, setDataCinema] = useState(null);
   const [dataListCinema, setDataListCinema] = useState([]);
   const [itemSearch, setItemSearch] = useState(null);
+  const [isEdit, setIsEdit] = useState(false);
+  const [isView, setIsView] = useState(false);
   const [userLocation, setUserLocation] = useState({
     latitude: 0,
     longitude: 0,
@@ -79,6 +81,9 @@ export default function App() {
   };
 
   useEffect(() => {
+    if (!localStorage.getItem("GisToken")) {
+      history.push("/SignIn");
+    }
     navigator.geolocation.getCurrentPosition(function (position) {
       setUserLocation({
         latitude: position.coords.latitude,
@@ -94,8 +99,9 @@ export default function App() {
     }),
       fetchCinemas();
   }, []);
+
   return (
-    <>
+    <React.Fragment>
       <MapGL
         {...viewport}
         width="100%"
@@ -109,6 +115,7 @@ export default function App() {
           setLatitude(e.lngLat[1]);
           setPopupForm(true);
           setPopupInfo(null);
+          setIsEdit(false);
         }}
       >
         {dataListCinema.length > 0 ? (
@@ -117,6 +124,9 @@ export default function App() {
             onClick={setPopupInfo}
             setPopupForm={setPopupForm}
             setItemSearch={setItemSearch}
+            setDataEdit={setDataEdit}
+            setIsView={setIsView}
+            setIsEdit={setIsEdit}
           />
         ) : (
           <></>
@@ -131,11 +141,17 @@ export default function App() {
             closeOnClick={false}
             onClose={setPopupInfo}
           >
-            <CityInfo info={popupInfo} />
+            <CityInfo
+              info={popupInfo}
+              setIsEdit={setIsEdit}
+              setPopupInfo={setPopupInfo}
+              isEdit={isEdit}
+              fetchCinemas={fetchCinemas}
+            />
           </Popup>
         )}
 
-        {popupForm && latitude && longitude && (
+        {popupForm && latitude && longitude && !isEdit && (
           <Popup
             tipSize={5}
             anchor="top"
@@ -153,26 +169,6 @@ export default function App() {
             />
           </Popup>
         )}
-
-        {/* {popupForm && latitude && longitude && (
-          <Popup
-            tipSize={5}
-            anchor="top"
-            closeOnClick={false}
-            onClose={setPopupForm}
-            longitude={longitude}
-            latitude={latitude}
-            style={{ background: "#ccc" }}
-          >
-            <CinemaForm
-              latitude={latitude}
-              longitude={longitude}
-              fetchCinemas={fetchCinemas}
-              setPopupForm={setPopupForm}
-            />
-          </Popup>
-        )} */}
-
         <GeolocateControl style={geolocateStyle} />
         <FullscreenControl style={fullscreenControlStyle} />
         <NavigationControl style={navStyle} />
@@ -182,11 +178,13 @@ export default function App() {
       <ControlPanel
         onClickItemSearchHandler={onClickItemSearchHandler}
         userLocation={userLocation}
+        setIsEdit={setIsEdit}
       />
-    </>
+    </React.Fragment>
   );
 }
+export default withRouter(App);
 
-export function renderToDom(container) {
-  render(<App />, container);
-}
+// export function renderToDom(container) {
+//   render(<App />, container);
+// }

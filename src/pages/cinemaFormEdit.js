@@ -2,7 +2,7 @@ import * as React from "react";
 import { Form, Input, Label, Row, Col, Button } from "reactstrap";
 import { createCinema } from "../helpers/app_backend/cinema-backend-helper";
 import { uploadCloud } from "../helpers/app_backend/file-backend-helper";
-function CinemaForm({ latitude, longitude, fetchCinemas, setPopupForm }) {
+function CinemaFormEdit({ latitude, longitude, fetchCinemas, setPopupForm }) {
   const [imgCinema, setImgCinema] = React.useState(null);
   const onImageChange = (event) => {
     // setDataCinema({
@@ -181,4 +181,4 @@ function CinemaForm({ latitude, longitude, fetchCinemas, setPopupForm }) {
   );
 }
 
-export default React.memo(CinemaForm);
+export default React.memo(CinemaFormEdit);

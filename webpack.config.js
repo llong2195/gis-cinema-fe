@@ -2,23 +2,31 @@
 // delete the local development overrides at the bottom of this file
 
 // avoid destructuring for older Node version support
-const resolve = require('path').resolve;
-const webpack = require('webpack');
+const resolve = require("path").resolve;
+const webpack = require("webpack");
 
 const BABEL_CONFIG = {
-  presets: ['@babel/env', '@babel/react'],
-  plugins: ['@babel/proposal-class-properties']
+  presets: ["@babel/env", "@babel/react"],
+  plugins: ["@babel/proposal-class-properties"],
 };
 
 const config = {
-  mode: 'development',
-
+  mode: "development",
+  devServer: {
+    historyApiFallback: true,
+  },
   entry: {
-    app: resolve('./src/app.js')
+    app: resolve("./src/index.js"),
   },
 
   output: {
-    library: 'App'
+    library: "App",
+  },
+  resolve: {
+    extensions: [".js", ".jsx"],
+    alias: {
+      webworkify: "webworkify-webpack",
+    },
   },
 
   module: {
@@ -26,22 +34,36 @@ const config = {
       {
         // Compile ES2015 using babel
         test: /\.js$/,
-        include: [resolve('.')],
+        include: [resolve(".")],
         exclude: [/node_modules/],
         use: [
           {
-            loader: 'babel-loader',
-            options: BABEL_CONFIG
-          }
-        ]
-      }
-    ]
+            loader: "babel-loader",
+            options: BABEL_CONFIG,
+          },
+        ],
+      },
+      {
+        test: /\.(sass|css|scss)$/,
+        use: [
+          "style-loader",
+          "css-loader",
+          {
+            loader: "postcss-loader",
+            options: {
+              plugins: () => [require("autoprefixer")()],
+            },
+          },
+          "sass-loader",
+        ],
+      },
+    ],
   },
 
   // Optional: Enables reading mapbox token from environment variable
-  plugins: [new webpack.EnvironmentPlugin(['GoongAccessToken'])]
+  plugins: [new webpack.EnvironmentPlugin(["GoongAccessToken"])],
 };
 
 // Enables bundling against src in this repo rather than the installed version
-module.exports = env =>
-  env && env.local ? require('../webpack.config.local')(config)(env) : config;
+module.exports = (env) =>
+  env && env.local ? require("../webpack.config.local")(config)(env) : config;

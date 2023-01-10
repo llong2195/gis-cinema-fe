@@ -53,7 +53,7 @@ function CinemaForm({ latitude, longitude, fetchCinemas, setPopupForm }) {
             flexDirection: "column",
             justifyContent: "space-between",
             minHeight: 217,
-            maxHeight: 400,
+            maxHeight: 430,
             height: "max-content",
             width: 300,
           }}
@@ -125,7 +125,7 @@ function CinemaForm({ latitude, longitude, fetchCinemas, setPopupForm }) {
               height={128}
               placeholder="Description"
               name="cinemaDescription"
-              style={{ borderRadius: 4, border: "#fff", height: 128 }}
+              style={{ borderRadius: 4, border: "#fff", height: 100 }}
               value={dataCinema.description}
               onChange={(e) =>
                 setDataCinema({ ...dataCinema, description: e.target.value })
@@ -151,7 +151,13 @@ function CinemaForm({ latitude, longitude, fetchCinemas, setPopupForm }) {
           <img
             src={imgCinema}
             width={200}
-            style={{ alignSelf: "center", marginTop: 24 }}
+            style={{
+              alignSelf: "center",
+              marginTop: 24,
+              minHeight: 100,
+              maxHeight: 113,
+              height: "max-content",
+            }}
           />
 
           <Row style={{ textAlign: "center" }}>

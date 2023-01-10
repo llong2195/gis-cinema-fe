@@ -9,7 +9,8 @@ const SIZE = 20;
 
 // Important for perf: the markers never change, avoid rerender when the map viewport changes
 function Pins(props) {
-  const { data, onClick, setPopupForm, setItemSearch } = props;
+  const { data, onClick, setPopupForm, setItemSearch, setDataEdit, setIsView,setIsEdit } =
+    props;
 
   return data.map((city, index) => (
     <Marker
@@ -27,7 +28,12 @@ function Pins(props) {
           transform: `translate(${-SIZE / 2}px,${-SIZE}px)`,
         }}
         onClick={() => {
-          onClick(city), setPopupForm(false), setItemSearch(null);
+          onClick(city),
+            setPopupForm(false),
+            setItemSearch(null),
+            setDataEdit(city),
+            setIsView(true);
+            setIsEdit(false)
         }}
       >
         <path d={ICON} />

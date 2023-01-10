@@ -11,44 +11,44 @@ const axiosApi = axios.create({
   baseURL: API_URL,
 });
 
-axiosApi.defaults.headers.common["Authorization"] = "Bearer eyJhbGciOiJIUzI1NiIsInR5cCI6IkpXVCJ9.eyJlbWFpbCI6Im5kdXlsb25nOTUwMUBnbWFpbC5jb20iLCJpZCI6MSwiaWF0IjoxNjcyNTg4Njk0LCJleHAiOjE2NzI2MjQ2OTR9.HuIJG6CnSwUS1kiRMJpljwY0gbl-1tHfqOvRI06Ejow";
-
+axiosApi.defaults.headers.common["Authorization"] = token
 axiosApi.interceptors.response.use(
-  response => response,
-  error => Promise.reject(error)
+  (response) => response,
+  (error) => Promise.reject(error)
 );
 
 export async function get(url, config = {}) {
-  return await axiosApi.get(url, { ...config }).then(response => response.data);
+  return await axiosApi
+    .get(url, { ...config })
+    .then((response) => response.data);
 }
 
 export async function post(url, data, config = {}) {
   return axiosApi
     .post(url, { ...data }, { ...config })
-    .then(response => response.data);
+    .then((response) => response.data);
 }
 
-export async function put(url, data, config = {}) {
+export async function patch(url, data, config = {}) {
   return axiosApi
-    .put(url, { ...data }, { ...config })
-    .then(response => response.data);
+    .patch(url, { ...data }, { ...config })
+    .then((response) => response.data);
 }
 
 export async function del(url, config = {}) {
   return await axiosApi
     .delete(url, { ...config })
-    .then(response => response.data);
+    .then((response) => response.data);
 }
 
 export async function postWithFormData(url, data, config = {}) {
   return axiosApi
     .post(url, data, { ...config })
-    .then(response => response.data);
+    .then((response) => response.data);
 }
 
 export async function putWithFormData(url, data, config = {}) {
   return axiosApi
     .put(url, data, { ...config })
-    .then(response => response.data);
+    .then((response) => response.data);
 }
-

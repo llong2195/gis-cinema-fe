@@ -2,8 +2,14 @@ import * as React from "react";
 import { Form, Label, Input, Button } from "reactstrap";
 import { findARound } from "../helpers/app_backend/cinema-backend-helper";
 
-function ControlPanel({ onClickItemSearchHandler, userLocation }) {
+function ControlPanel({ onClickItemSearchHandler, userLocation, setIsEdit }) {
   const [dataSearch, setDataSearch] = React.useState([]);
+
+  const [dataNearBy, setDataNearBy] = React.useState({
+    latitude: userLocation.latitude,
+    longitude: userLocation.longitude,
+    distance: 3000,
+  });
   const handleSubmit = async (e) => {
     const dataFilter = {
       name: e.target["search"].value,
@@ -14,10 +20,17 @@ function ControlPanel({ onClickItemSearchHandler, userLocation }) {
   };
 
   const searchNearBy = async (e) => {
-    await findARound(userLocation).then((response) => {
+    await findARound(dataNearBy).then((response) => {
       setDataSearch(response.body);
     });
   };
+  React.useEffect(() => {
+    setDataNearBy({
+      ...dataNearBy,
+      latitude: userLocation.latitude,
+      longitude: userLocation.longitude,
+    });
+  }, [userLocation]);
   return (
     <div className="control-panel">
       <div>
@@ -43,6 +56,37 @@ function ControlPanel({ onClickItemSearchHandler, userLocation }) {
           >
             Tìm xung quanh bạn
           </Button>
+          {/* <select
+            value={dataNearBy.distance}
+            onChange={(e) => {
+              setDataNearBy({
+                ...dataNearBy,
+                distance: e.target.value,
+              });
+            }}
+          >
+            <option value="3000">3km</option>
+            <option value="5000">5km</option>
+            <option value="7000">7km</option>
+            <option value="10000">10km</option>
+          </select> */}
+          <input
+            type="number"
+            style={{
+              width: 36,
+              marginLeft: 14,
+              border: "none",
+              borderRadius: 5,
+              height: 24,
+            }}
+            onChange={(e) => {
+              setDataNearBy({
+                ...dataNearBy,
+                distance: (e.target.value + "000").toString(),
+              });
+            }}
+          />{" "}
+          km
         </div>
         <Form
           style={{
@@ -99,6 +143,7 @@ function ControlPanel({ onClickItemSearchHandler, userLocation }) {
               }}
               onClick={() => {
                 onClickItemSearchHandler(item);
+                setIsEdit(false)
               }}
             >
               <div>
