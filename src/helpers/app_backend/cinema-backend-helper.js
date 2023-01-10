@@ -1,6 +1,6 @@
 import { get, post, patch, del } from "../api_helper";
 import { spreadSearchQuery } from "../utilities";
-const BASE_API_URL = `http://localhost:4000/api/v1/cinema`;
+const BASE_API_URL = process.env.REACT_APP_CINEMA_ENPOINT;
 
 const getListCinema = () => {
   return get(`${BASE_API_URL}`);
