@@ -20,7 +20,7 @@ import CinemaFormEdit from "./pages/cinemaFormEdit";
 import SlidingPanel from "react-sliding-side-panel";
 import { withRouter, useHistory } from "react-router-dom";
 
-const TOKEN = ""; // Set your goong maptiles key here
+const TOKEN = process.env.REACT_APP_GOONGAPI || ""; // Set your goong maptiles key here
 
 const geolocateStyle = {
   top: 0,

@@ -1,6 +1,10 @@
 {
   "scripts": {
-    "start": "env-cmd -f .env webpack-dev-server --progress --hot --open",
+    "start": "react-scripts start",
+    "build": "react-scripts build",
+    "test": "react-scripts test",
+    "eject": "react-scripts eject",
+    "start-env": "env-cmd -f .env webpack-dev-server --progress --hot --open",
     "start-local": "env-cmd -f .env webpack-dev-server --env.local --progress --hot --open"
   },
   "dependencies": {
