@@ -1,6 +1,6 @@
 import { get, post, put, del,postWithFormData } from '../api_helper'
 
-const BASE_API_URL = process.env.REACT_APP_FILE_ENPOINT;
+const BASE_API_URL = process.env.REACT_APP_FILE_ENDPOINT;
 console.log(process.env)
 
 const uploadLocal = data => {
