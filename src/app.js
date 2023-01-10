@@ -118,7 +118,7 @@ function App() {
           setIsEdit(false);
         }}
       >
-        {dataListCinema.length > 0 ? (
+        {dataListCinema?.length > 0 ? (
           <Pins
             data={dataListCinema}
             onClick={setPopupInfo}
