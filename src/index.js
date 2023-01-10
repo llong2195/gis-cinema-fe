@@ -6,7 +6,8 @@ import SignIn from "./pages/sign-in";
 const Index = () => (
   <BrowserRouter>
     <Switch>
-        <Route exact path={"/Map"} component={App} />
+        <Route exact path={"/"} component={App} />
+        <Route path={"/Map"} component={App} />
         <Route path={"/SignIn"} component={SignIn} />
     </Switch>
   </BrowserRouter>
